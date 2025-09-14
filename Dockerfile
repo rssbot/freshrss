@@ -10,5 +10,3 @@ RUN apt-get update && apt-get install -y unzip \
     && apt-get remove --purge -y unzip \
     && apt-get autoremove -y \
     && apt-get clean
-
-CMD ["apache2-foreground"]
