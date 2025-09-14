@@ -1,11 +1,14 @@
 FROM freshrss/freshrss:latest
 
-# Copy all extensions from your GitHub repo to FreshRSS extensions directory
-COPY extensions/ /var/www/FreshRSS/extensions/
+COPY extensions.zip /tmp/extensions.zip
 
-# Set proper ownership and permissions for web server
-RUN chown -R www-data:www-data /var/www/FreshRSS/extensions/ \
-    && chmod -R 755 /var/www/FreshRSS/extensions/
+RUN apt-get update && apt-get install -y unzip \
+    && unzip /tmp/extensions.zip -d /var/www/FreshRSS/ \
+    && chown -R www-data:www-data /var/www/FreshRSS/extensions/ \
+    && chmod -R 755 /var/www/FreshRSS/extensions/ \
+    && rm /tmp/extensions.zip \
+    && apt-get remove --purge -y unzip \
+    && apt-get autoremove -y \
+    && apt-get clean
 
-# Use the default FreshRSS startup command
 CMD ["apache2-foreground"]
